@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Admin Testimoni</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#f7fbfb;
+padding:30px;
+}
+
+.login-box,
+.admin-panel{
+max-width:1000px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+h1{
+color:#39c5b6;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+button{
+background:#39c5b6;
+color:white;
+border:none;
+padding:12px 24px;
+border-radius:999px;
+cursor:pointer;
+}
+
+.list{
+display:grid;
+gap:20px;
+margin-top:25px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.card img{
+width:100%;
+max-width:250px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.delete-btn{
+background:#e53935;
+margin-top:15px;
+}
+
+.hidden{
+display:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="login-box" id="loginBox">
+
+<h1>Login Admin</h1>
+
+<input
+type="password"
+id="password"
+placeholder="Password Admin">
+
+<button onclick="loginAdmin()">
+Masuk
+</button>
+
+</div>
+
+<div class="admin-panel hidden" id="adminPanel">
+
+<h1>Kelola Testimoni</h1>
+
+<div id="listTestimoni" class="list"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+onValue,
+remove
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAd0EkTcHrM-aN2XIeQkstrf8Dzj9bAJn0",
+authDomain: "nibble-craft-74edf.firebaseapp.com",
+databaseURL: "https://nibble-craft-74edf-default-rtdb.asia-southeast1.firebasedatabase.app/",
+projectId: "nibble-craft-74edf",
+storageBucket: "nibble-craft-74edf.firebasestorage.app",
+messagingSenderId: "763856396264",
+appId: "1:763856396264:web:f59eabe3093aabe4d58e5d"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const ADMIN_PASSWORD = "190701";
+
+window.loginAdmin = function(){
+
+const pass =
+document.getElementById("password").value;
+
+if(pass !== ADMIN_PASSWORD){
+
+alert("Password salah");
+return;
+
+}
+
+document
+.getElementById("loginBox")
+.classList.add("hidden");
+
+document
+.getElementById("adminPanel")
+.classList.remove("hidden");
+
+loadData();
+
+}
+
+function loadData(){
+
+onValue(ref(db,"testimoni"),snapshot=>{
+
+const data = snapshot.val();
+
+let html="";
+
+if(!data){
+
+html="<p>Belum ada testimoni</p>";
+
+}else{
+
+Object.entries(data)
+.reverse()
+.forEach(([id,item])=>{
+
+html += `
+
+<div class="card">
+
+<h3>${item.nama}</h3>
+
+<p>${item.rating}</p>
+
+<p>${item.komentar}</p>
+
+<p>${item.tanggal}</p>
+
+${item.foto ? `
+<img src="${item.foto}">
+` : ""}
+
+<br>
+
+<button
+class="delete-btn"
+onclick="hapusTestimoni('${id}')">
+
+Hapus Testimoni
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById("listTestimoni").innerHTML=html;
+
+});
+
+}
+
+window.hapusTestimoni = function(id){
+
+if(!confirm("Hapus testimoni ini?"))
+return;
+
+remove(ref(db,"testimoni/"+id));
+
+}
+
+</script>
+
+</body>
+</html>
+```
