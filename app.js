@@ -571,8 +571,8 @@ function checkoutWhatsApp() {
     });
     
     orderText += `\n*Subtotal:* ${formatIDR(subtotal)}`;
-    orderText += `\n*Ongkir:* ${formatIDR(10000)}`;
-    orderText += `\n*Total Akhir:* ${formatIDR(subtotal + 10000)}`;
+    orderText += `\n*Ongkir:* ${formatIDR(0)}`;
+    orderText += `\n*Total Akhir:* ${formatIDR(subtotal + 0)}`;
     orderText += `\n\n_Mohon info instruksi pembayaran selanjutnya, terima kasih._`;
 
     const encodedText = encodeURIComponent(orderText);
