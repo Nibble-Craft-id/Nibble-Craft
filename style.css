@@ -1,0 +1,59 @@
+/* Custom CSS utilities for mobile simulation smoothness */
+body {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth Fade-in Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity; /* Mencegah bug pembekuan scroll setelah animasi selesai */
+}
+
+/* ================= FIX KATEGORI SCROLL ================= */
+/* Menyembunyikan scrollbar di Chrome, Safari, dan Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Menyembunyikan scrollbar di IE, Edge, dan Firefox, sekaligus mengaktifkan scroll horizontal */
+.no-scrollbar {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important;    /* Firefox */
+    overflow-x: auto !important;          /* MEMAKSA fungsi scroll ke samping aktif */
+    -webkit-overflow-scrolling: touch;   /* Membuat guliran smooth di HP Android/iOS */
+}
+/* ======================================================= */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5E7EB;
+    border-radius: 10px;
+}
+
+/* Animasi Flying Item ke Keranjang */
+@keyframes flyToCart {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    50% { opacity: 0.9; transform: translate(calc(var(--target-x) * 0.4), calc(var(--target-y) * 0.2 - 30px)) scale(1.2); }
+    100% { transform: translate(var(--target-x), var(--target-y)) scale(0.2); opacity: 0.3; }
+}
+.animate-fly-to-cart {
+    animation: flyToCart 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}

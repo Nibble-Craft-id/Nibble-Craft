@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nibble_Craft.id | Modern Food & Dessert Shop</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#F4F7F4] text-gray-800 font-['Plus_Jakarta_Sans'] min-h-screen flex justify-center items-center antialiased">
+
+    <div class="w-full max-w-md bg-white min-h-[100vh] sm:min-h-[850px] sm:rounded-[40px] shadow-2xl relative flex flex-col overflow-hidden sm:border-8 border-gray-900">
+        
+        <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 px-6 py-5 flex items-center justify-between border-b border-gray-100/50">
+    
+    <div id="brand-area" class="flex items-center gap-3.5 transition-all duration-300 transform origin-left">
+        <div class="w-10 h-10 rounded-2xl bg-green-600 flex items-center justify-center text-white overflow-hidden shadow-md shadow-green-100/50 flex-shrink-0">
+            <img id="main-app-logo" src="" alt="Logo" class="w-full h-full object-cover hidden" onerror="this.style.display='none'; document.getElementById('fallback-icon').classList.remove('hidden');">
+            
+            <i id="fallback-icon" class="fa-solid fa-cookie-bite text-lg"></i>
+        </div>
+        
+        <div>
+            <h1 class="text-lg font-black text-gray-950 tracking-tight leading-none">Nibble_Craft.id</h1>
+        </div>
+    </div>
+
+    <button id="btn-cart-top" class="relative w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 transition-all duration-300 active:scale-90 hover:bg-gray-100/50">
+        <i class="fa-solid fa-basket-shopping text-sm"></i>
+        <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center scale-0 transition-transform duration-300">0</span>
+    </button>
+    
+    <button id="btn-back" class="absolute left-6 hidden w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-700 transition-all duration-200 active:scale-90 hover:bg-gray-100">
+        <i class="fa-solid fa-chevron-left text-xs"></i>
+    </button>
+</header>
+
+       <main id="app-content" class="flex-1 overflow-y-auto overflow-x-hidden min-w-0 w-full">
+    </main>
+
+        <nav class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] bg-black/95 backdrop-blur-md rounded-2xl py-4 px-6 flex justify-between items-center shadow-lg z-30 transition-all duration-300">
+            <button data-target="home" class="nav-item text-green-400 flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-house text-lg"></i>
+            </button>
+            <button data-target="products" class="nav-item text-gray-400 flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-utensils text-lg"></i>
+            </button>
+            <button data-target="cart" class="nav-item text-gray-400 flex flex-col items-center gap-1 transition-all relative">
+                <i class="fa-solid fa-cart-shopping text-lg"></i>
+            </button>
+            <button data-target="testimonials" class="nav-item text-gray-400 flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-comment-dots text-lg"></i>
+            </button>
+            <button data-target="about" class="nav-item text-gray-400 flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-store text-lg"></i>
+            </button>
+        </nav>
+    </div>
+
+    <script src="data.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAd0EkTcHrM-aN2XIeQkstrf8Dzj9bAJn0",
+    authDomain: "nibble-craft-74edf.firebaseapp.com",
+    databaseURL: "https://nibble-craft-74edf-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "nibble-craft-74edf",
+    storageBucket: "nibble-craft-74edf.firebasestorage.app",
+    messagingSenderId: "763856396264",
+    appId: "1:763856396264:web:f59eabe3093aabe4d58e5d"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  
+  // Buat referensi ke database
+  const database = firebase.database();
+</script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
