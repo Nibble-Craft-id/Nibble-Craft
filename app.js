@@ -272,7 +272,7 @@ function renderCart() {
     }
 
     const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-    const ongkir = 10000;
+    const ongkir = 0;
     const total = subtotal + ongkir;
 
     let html = `
