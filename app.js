@@ -175,7 +175,7 @@ function renderProducts() {
                         <button onclick="filterCategory('${cat}')" class="whitespace-nowrap flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all ${currentState.selectedCategory === cat ? 'bg-green-600 text-white shadow-md shadow-green-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
                             ${cat}
                         </button>
-                    `).join('')}
+                     `).join('')}
                 </div>
             </div>
 
@@ -199,7 +199,7 @@ function renderProducts() {
                             <i class="fa-solid fa-plus text-[10px]"></i>
                         </button>
                     </div>
-                `).join('')}
+                 `).join('')}
             </div>
         </div>
     `;
@@ -255,7 +255,7 @@ function renderProductDetail(productId) {
     appContent.innerHTML = html;
 }
 
-// 3. HALAMAN KERANJANG (CART)
+// 3. HALAMAN KERANJANG (CART) - DIKONEKSIKAN KE DATA.JS SHIPPINGCOST
 function renderCart() {
     if (cart.length === 0) {
         appContent.innerHTML = `
@@ -272,7 +272,8 @@ function renderCart() {
     }
 
     const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
-    const ongkir = 0;
+    // Membaca biaya ongkir dinamis dari data.js
+    const ongkir = (typeof SHOP_DATA !== 'undefined' && SHOP_DATA.shippingCost) ? SHOP_DATA.shippingCost : 0;
     const total = subtotal + ongkir;
 
     let html = `
@@ -296,7 +297,7 @@ function renderCart() {
                             <button onclick="updateQty('${item.product.id}', 1)" class="w-6 h-6 rounded-lg bg-white shadow-xs flex items-center justify-center text-xs font-bold text-gray-600 active:scale-90">+</button>
                         </div>
                     </div>
-                `).join('')}
+                 `).join('')}
             </div>
 
             <div class="mt-6 bg-white rounded-2xl p-4 border border-gray-100 space-y-2.5 text-xs text-gray-600 shadow-xs">
@@ -314,10 +315,7 @@ function renderCart() {
     appContent.innerHTML = html;
 }
 
-// ==========================================
-// ISI EDITAN UNTUK HALAMAN TESTIMONI & ADMIN
-// ==========================================
-
+// 4. HALAMAN TESTIMONI - DENGAN TAMBAHAN KOLOM EMAIL
 function renderTestimonials() {
     let html = `
         <div class="px-6 pb-24 animate-fade-in">
@@ -334,6 +332,12 @@ function renderTestimonials() {
                 
                 <div>
                     <input type="text" id="testi-name" placeholder="Nama Anda" 
+                        class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-green-500 font-medium">
+                </div>
+
+                <!-- INPUT EMAIL BARU -->
+                <div>
+                    <input type="email" id="testi-email" placeholder="Alamat Email Anda" 
                         class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-green-500 font-medium">
                 </div>
                 
@@ -403,19 +407,21 @@ function listenToFirebaseTestimonials() {
     });
 }
 
-// FUNGSI UNTUK MENGIRIM ULASAN USER BARU KE DATABASE CLOUD
+// FUNGSI UNTUK MENGIRIM ULASAN USER BARU KE DATABASE CLOUD (MENYIMPAN EMAIL JUGA)
 function submitTestimonial() {
     const nameInput = document.getElementById('testi-name');
+    const emailInput = document.getElementById('testi-email'); // Tambahan elemen email
     const ratingInput = document.getElementById('testi-rating');
     const reviewInput = document.getElementById('testi-review');
 
-    if (!nameInput.value.trim() || !reviewInput.value.trim()) {
-        alert('Silakan isi nama dan komentar Anda terlebih dadaulu!');
+    if (!nameInput.value.trim() || !emailInput.value.trim() || !reviewInput.value.trim()) {
+        alert('Silakan isi nama, email, dan komentar Anda terlebih dahulu!');
         return;
     }
 
     const newTestimonial = {
         name: nameInput.value.trim(),
+        email: emailInput.value.trim(), // Data email disimpan ke Firebase cloud
         rating: parseInt(ratingInput.value),
         review: reviewInput.value.trim(),
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100", // Avatar default estetik
@@ -426,6 +432,7 @@ function submitTestimonial() {
     database.ref('testimonials').push(newTestimonial)
         .then(() => {
             nameInput.value = '';
+            emailInput.value = ''; // Reset input email setelah sukses kirim
             reviewInput.value = '';
         })
         .catch((error) => {
@@ -562,8 +569,11 @@ function updateCartCounter() {
     }
 }
 
+// CHECKOUT WHATSAPP - SEKARANG MEMBACA VARIABEL ONGKIR DINAMIS
 function checkoutWhatsApp() {
     let subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+    const ongkir = (typeof SHOP_DATA !== 'undefined' && SHOP_DATA.shippingCost) ? SHOP_DATA.shippingCost : 0;
+    
     let orderText = `*Halo Nibble_Craft.id, saya mau pesan:* \n\n`;
     
     cart.forEach((item, index) => {
@@ -571,8 +581,8 @@ function checkoutWhatsApp() {
     });
     
     orderText += `\n*Subtotal:* ${formatIDR(subtotal)}`;
-    orderText += `\n*Ongkir:* ${formatIDR(0)}`;
-    orderText += `\n*Total Akhir:* ${formatIDR(subtotal + 0)}`;
+    orderText += `\n*Ongkir:* ${formatIDR(ongkir)}`;
+    orderText += `\n*Total Akhir:* ${formatIDR(subtotal + ongkir)}`;
     orderText += `\n\n_Mohon info instruksi pembayaran selanjutnya, terima kasih._`;
 
     const encodedText = encodeURIComponent(orderText);
